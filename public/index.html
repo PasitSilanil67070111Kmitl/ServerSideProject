@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เสียงของมหาลัย | แจ้งปัญหาภายในมหาวิทยาลัย</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" onclick="showPage('home')"><span class="brand-mark">V</span><span>เสียงของ<span
+          class="purple">มหาลัย</span><small>CAMPUS VOICE</small></span></a>
+    <nav><a href="#" onclick="showPage('home')">หน้าหลัก</a><a href="#" onclick="showPage('reports')">รายการปัญหา</a><a
+        href="#" onclick="showPage('create')">แจ้งปัญหา</a><a href="#" onclick="showPage('mine')">รายการของฉัน</a></nav>
+    <div id="accountArea"></div>
+  </header>
+
+  <main>
+    <section id="homePage" class="page">
+      <div class="hero">
+        <div class="hero-copy"><span class="eyebrow">CAMPUS COMMUNITY PLATFORM</span>
+          <h1>ร่วมสร้างมหาลัย<br><span class="purple">ที่ดีกว่าเดิม</span></h1>
+          <p>พบปัญหาภายในมหาวิทยาลัย แจ้งให้เราทราบ<br>เพื่อให้หน่วยงานที่เกี่ยวข้องเข้ามาดูแลและแก้ไขได้ตรงจุด</p>
+          <div class="hero-actions"><button class="btn primary" onclick="showPage('create')">＋
+              แจ้งปัญหาตอนนี้</button><button class="btn secondary"
+              onclick="showPage('reports')">ดูปัญหาทั้งหมด</button></div>
+        </div>
+        <div class="hero-art">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="hero-icon">📣</div>
+          <div class="float-card card-a">📍 แจ้งปัญหาได้ทุกพื้นที่</div>
+          <div class="float-card card-b">✓ ร่วมกันพัฒนามหาลัย</div>
+        </div>
+      </div>
+      <div class="section-head">
+        <div><span class="eyebrow">HOW IT WORKS</span>
+          <h2>แจ้งปัญหาได้ง่าย ๆ ใน 3 ขั้นตอน</h2>
+        </div>
+      </div>
+      <div class="steps">
+        <article><b>01</b>
+          <div class="step-icon">📝</div>
+          <h3>แจ้งรายละเอียด</h3>
+          <p>ระบุหัวข้อและรายละเอียดของปัญหาที่พบ</p>
+        </article>
+        <article><b>02</b>
+          <div class="step-icon">📍</div>
+          <h3>ระบุตำแหน่ง</h3>
+          <p>ปักหมุดจุดที่พบปัญหาบนแผนที่</p>
+        </article>
+        <article><b>03</b>
+          <div class="step-icon">🔎</div>
+          <h3>ติดตามผล</h3>
+          <p>ตรวจสอบสถานะการดำเนินงานได้ตลอดเวลา</p>
+        </article>
+      </div>
+      <div class="section-head">
+        <div><span class="eyebrow">LATEST REPORTS</span>
+          <h2>ปัญหาที่ถูกรายงานล่าสุด</h2>
+        </div><button class="text-btn" onclick="showPage('reports')">ดูทั้งหมด →</button>
+      </div>
+      <div id="latestReports" class="report-grid"></div>
+    </section>
+
+    <section id="reportsPage" class="page hidden">
+      <div class="page-heading"><span class="eyebrow">COMMUNITY REPORTS</span>
+        <h1>รายการแจ้งปัญหา</h1>
+        <p>ติดตามปัญหาที่เกิดขึ้นภายในมหาวิทยาลัย</p>
+      </div>
+      <div class="toolbar"><input id="searchReports" placeholder="ค้นหาหัวข้อปัญหา..." oninput="renderReports()"><select
+          id="filterStatus" onchange="renderReports()">
+          <option value="">ทุกสถานะ</option>
+          <option value="pending">รอดำเนินการ</option>
+          <option value="in_progress">กำลังดำเนินการ</option>
+          <option value="resolved">แก้ไขแล้ว</option>
+          <option value="rejected">ไม่รับดำเนินการ</option>
+        </select></div>
+      <div id="allReports" class="report-grid"></div>
+    </section>
+
+    <section id="createPage" class="page hidden">
+      <div class="page-heading"><span class="eyebrow">MAKE A DIFFERENCE</span>
+        <h1>แจ้งปัญหาภายในมหาวิทยาลัย</h1>
+        <p>กรอกรายละเอียดให้ครบถ้วน เพื่อให้เจ้าหน้าที่ตรวจสอบได้รวดเร็วขึ้น</p>
+      </div>
+      <form id="reportForm" class="form-card">
+        <div class="form-title"><span>01</span>
+          <div>
+            <h2>รายละเอียดปัญหา</h2>
+            <p>ข้อมูลเบื้องต้นของเรื่องที่ต้องการแจ้ง</p>
+          </div>
+        </div>
+        <label>หัวข้อปัญหา *</label><input name="report_title" required maxlength="120"
+          placeholder="เช่น ไฟส่องสว่างบริเวณทางเดินไม่ติด">
+        <label>ประเภทปัญหา *</label><select name="cat_id" id="categorySelect" required>
+          <option value="">กำลังโหลดประเภทปัญหา...</option>
+        </select>
+        <label>รายละเอียด *</label><textarea name="report_desc" rows="4" required
+          placeholder="อธิบายสิ่งที่พบ วันเวลา หรือข้อมูลเพิ่มเติม..."></textarea>
+        <div class="form-title space-top"><span>02</span>
+          <div>
+            <h2>ตำแหน่งที่พบปัญหา</h2>
+            <p>คลิกบนแผนที่เพื่อปักหมุดตำแหน่ง (สามารถลากหมุดได้)</p>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <div id="map"></div>
+        </div>
+        <div class="coordinate-row"><span>ละติจูด: <b id="latText">ยังไม่ได้เลือก</b></span><span>ลองจิจูด: <b
+              id="lngText">ยังไม่ได้เลือก</b></span><button type="button" class="text-btn"
+            onclick="locateMe()">ใช้ตำแหน่งปัจจุบัน</button></div>
+        <input type="hidden" name="latitude" id="latitude"><input type="hidden" name="longitude" id="longitude">
+        <button class="btn primary submit-btn" type="submit">ส่งเรื่องแจ้งปัญหา →</button>
+      </form>
+    </section>
+
+    <section id="minePage" class="page hidden">
+      <div class="page-heading"><span class="eyebrow">MY ACTIVITY</span>
+        <h1>รายการแจ้งปัญหาของฉัน</h1>
+        <p>ตรวจสอบความคืบหน้าของเรื่องที่คุณแจ้ง</p>
+      </div>
+      <div id="myReports" class="report-grid"></div>
+    </section>
+
+    <section id="detailPage" class="page hidden">
+      <button class="text-btn back-btn" onclick="showPage('reports')">← กลับไปรายการ</button>
+      <div id="reportDetail"></div>
+    </section>
+
+    <section id="authPage" class="page hidden">
+      <div class="auth-card">
+        <div class="auth-brand">📣</div><span class="eyebrow">CAMPUS VOICE</span>
+        <h1 id="authTitle">เข้าสู่ระบบ</h1>
+        <p id="authSubtitle">เข้าสู่ระบบเพื่อแจ้งปัญหาและติดตามผล</p>
+        <form id="authForm">
+          <div id="nameField" class="hidden"><label>ชื่อที่แสดง</label><input name="user_name"
+              placeholder="ชื่อ-นามสกุล"></div><label>อีเมล</label><input name="user_email" type="email" required
+            placeholder="name@university.ac.th"><label>รหัสผ่าน</label><input name="user_password" type="password"
+            required minlength="6" placeholder="อย่างน้อย 6 ตัวอักษร"><button class="btn primary full"
+            id="authSubmit">เข้าสู่ระบบ</button>
+        </form>
+        <p class="auth-switch" id="authSwitch">ยังไม่มีบัญชี? <a onclick="toggleAuth()">สมัครสมาชิก</a></p>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="brand"><span class="brand-mark">V</span><span>เสียงของ<span class="purple">มหาลัย</span><small>CAMPUS
+          VOICE</small></span></div>
+    <p>พื้นที่เล็ก ๆ สำหรับเสียงของทุกคน เพื่อมหาวิทยาลัยที่ดีขึ้น</p><small>© 2026 Campus Voice Project</small>
+  </footer>
+  <div id="toast" class="toast"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
