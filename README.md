@@ -36,18 +36,18 @@ npm start
 หากต้องการทดสอบหน้าจัดการ ให้เปิด MongoDB Compass แล้วแก้ค่า `user_role` ของบัญชีทดสอบใน collection `users` เป็น `เจ้าหน้าที่` หรือ `แอดมิน` จากนั้นออกจากระบบและเข้าสู่ระบบใหม่ เพื่อให้ token มี role ล่าสุด
 
 ## API หลัก
-| Method | Endpoint | คำอธิบาย |
-|---|---|---|
-| POST | `/api/v1/auth/register` | สมัครสมาชิก |
-| POST | `/api/v1/auth/login` | เข้าสู่ระบบ |
-| GET | `/api/v1/categories` | ดูประเภทปัญหา |
-| POST | `/api/v1/reports` | สร้างรายการแจ้งปัญหา (ต้อง Login) |
-| GET | `/api/v1/reports` | ดูรายการทั้งหมด |
-| GET | `/api/v1/reports/:id` | ดูรายละเอียด |
-| PATCH | `/api/v1/reports/:id/status` | เปลี่ยนสถานะ (เจ้าหน้าที่/แอดมิน) |
-| DELETE | `/api/v1/reports/:id` | ลบรายการ (เจ้าหน้าที่/แอดมิน) |
-| GET | `/api/v1/reports/me` | ดูรายการที่ตนเองแจ้ง (ต้อง Login) |
-| POST | `/api/v1/reports/:id/images` | เพิ่มรูปภาพ (ต้อง Login และเป็นเจ้าของรายการหรือเจ้าหน้าที่) |
+| Method | Endpoint | คำอธิบาย | Access Role | Status Code |
+|---|---|---|---|---|
+| POST | /api/v1/auth/register | สมัครสมาชิก | Public | 201 |
+| POST | /api/v1/auth/login | เข้าสู่ระบบ | Public | 200 |
+| GET | /api/v1/categories | ดูประเภทปัญหา | Public | 200 |
+| POST | /api/v1/reports | สร้างรายการแจ้งปัญหา | บุคลากรมหาลัย เจ้าหน้าที่ แอดมิน | 201 |
+| GET | /api/v1/reports | ดูรายการทั้งหมด | Public | 200 |
+| GET | /api/v1/reports/:id | ดูรายละเอียด | Public | 200 |
+| PATCH | /api/v1/reports/:id/status | เปลี่ยนสถานะ | เจ้าหน้าที่/แอดมิน | 200 |
+| DELETE | /api/v1/reports/:id | ลบรายการ | เจ้าหน้าที่ แอดมิน | 204 |
+| GET | /api/v1/reports/me | ดูรายการที่ตนเองแจ้ง | บุคลากรมหาลัย เจ้าหน้าที่ แอดมิน | 200 |
+| POST | /api/v1/reports/:id/images | เพิ่มรูปภาพ | บุคลากรมหาลัย(ที่เป็นเจ้าของรายการ) เจ้าหน้าที่ แอดมิน | 201 |
 
 ## โครงสร้างข้อมูล
 - `users`: `user_name`, `user_email`, `user_password` (hashed), `user_role`
